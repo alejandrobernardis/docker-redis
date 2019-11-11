@@ -34,6 +34,26 @@ docker ps --filter "name=redis"
 $ docker run --name some-app --link some-redis:redis -d some-app-image:5.0
 ```
 
+### change password
+
+````bash
+co=18500
+if docker ps -a --format "{{.Ports}}"| grep -oP "\:$co\-"; then
+  echo -n "Contraseña: "
+  read -s REDIS_PASSWORD
+  echo "******"
+  docker exec -i redis-${co} bash << EOF
+cp -vf /etc/redis/redis.conf /etc/redis/redis.conf.back
+sed -e 's/^requirepass ".*"/requirepass "'"${REDIS_PASSWORD}"'"/i' \
+  -i /etc/redis/redis.conf
+EOF
+  docker restart redis-${co}
+  echo "Done."
+  echo
+fi
+unset co
+```
+
 # BUILD
 
 ## How to build this image
