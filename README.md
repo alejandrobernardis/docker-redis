@@ -36,7 +36,7 @@ $ docker run --name some-app --link some-redis:redis -d some-app-image:5.0
 
 ### change password
 
-````bash
+```bash
 co=18500
 if docker ps -a --format "{{.Ports}}"| grep -oP "\:$co\-"; then
   echo -n "Contraseña: "
